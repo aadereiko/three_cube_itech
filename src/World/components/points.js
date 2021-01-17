@@ -1,9 +1,11 @@
 import {
   BufferGeometry,
   Float32BufferAttribute,
+  Geometry,
   MathUtils,
   Points,
   PointsMaterial,
+  Vector3,
 } from 'three';
 
 const generateRandPositionCoordinate = () =>
@@ -12,22 +14,20 @@ const generateRandPositionCoordinate = () =>
     : MathUtils.randFloat(-10, -2);
 
 function createPoints() {
-  const vertices = [];
+  const geometry = new Geometry();
 
   for (let i = 0; i < 15; i++) {
     const x = generateRandPositionCoordinate();
     const y = generateRandPositionCoordinate();
     const z = generateRandPositionCoordinate();
 
-    vertices.push(x, y, z);
+    geometry.vertices.push(new Vector3(x, y, z));
   }
 
   const material = new PointsMaterial({ color: 'black', size: 1 });
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
 
-  const point = new Points(geometry, material);
-  return point;
+  const points = new Points(geometry, material);
+  return points;
 }
 
 export { createPoints };
