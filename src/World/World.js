@@ -1,16 +1,15 @@
-import { createCamera } from './components/camera.js';
-import { createLights } from './components/lights.js';
-import { createScene } from './components/scene.js';
-import { createCube } from './components/cube.js';
-import { createPoints } from './components/points.js';
-import { createArrowHelper } from './components/arrowHelper.js';
+import { createCamera } from "./components/camera.js";
+import { createLights } from "./components/lights.js";
+import { createScene } from "./components/scene.js";
+import { createCube } from "./components/cube.js";
+import { createPoints } from "./components/points.js";
 
-import { createControls } from './systems/controls.js';
-import { createRenderer } from './systems/renderer.js';
-import { Resizer } from './systems/Resizer.js';
-import { Loop } from './systems/Loop.js';
-import { createRaycaster } from './systems/Raycaster.js';
-import { createConvexSurface } from './components/convexSurface.js';
+import { createControls } from "./systems/controls.js";
+import { createRenderer } from "./systems/renderer.js";
+import { Resizer } from "./systems/Resizer.js";
+import { Loop } from "./systems/Loop.js";
+import { createSurfaceFaces } from "./components/surfaceFaces.js";
+import { createLines } from "./components/lines.js";
 
 let camera;
 let renderer;
@@ -25,9 +24,9 @@ class World {
 
     const cube = createCube();
     const points = createPoints();
-    const raycaster = createRaycaster();
-    const arrowHelper = createArrowHelper(renderer, raycaster, camera, [cube]);
-    const { frontMesh, backMesh } = createConvexSurface(points.geometry.vertices);
+    const pointsToProjectVertices = points.geometry.vertices.slice(0, 5);
+    const lines = createLines(pointsToProjectVertices, cube);
+    const surfaceFaces = createSurfaceFaces(pointsToProjectVertices);
 
     loop = new Loop(camera, scene, renderer);
     container.append(renderer.domElement);
@@ -40,7 +39,12 @@ class World {
     new Resizer(container, camera, renderer);
     scene.add(directionalLight, ambientLight);
 
-    scene.add(cube, points, arrowHelper, frontMesh, backMesh);
+
+    scene.add(cube);
+    scene.add(points);
+    scene.add(...lines);
+    scene.add(surfaceFaces.frontSurface, surfaceFaces.backSurface);
+    // scene.add(frontMesh, backMesh);
   }
 
   render() {

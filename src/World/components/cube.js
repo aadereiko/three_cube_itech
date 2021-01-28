@@ -6,8 +6,7 @@ function createCube() {
     color: new Color('red'),
   });
   const cube = new Mesh(geometry, material);
-
-  cube.rotation.set(-0.5, -0.1, 0.8);
+  cube.name = 'Central cube';
 
   return cube;
 }
