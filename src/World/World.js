@@ -8,7 +8,6 @@ import { createControls } from "./systems/controls.js";
 import { createRenderer } from "./systems/renderer.js";
 import { Resizer } from "./systems/Resizer.js";
 import { Loop } from "./systems/Loop.js";
-import { createConvexSurface } from "./components/convexSurface.js";
 import { createSurfaceFaces } from "./components/surfaceFaces.js";
 import { createLines } from "./components/lines.js";
 
@@ -27,7 +26,7 @@ class World {
     const points = createPoints();
     const pointsToProjectVertices = points.geometry.vertices.slice(0, 5);
     const lines = createLines(pointsToProjectVertices, cube);
-    const surfaceFaces = createSurfaceFaces(points.geometry.vertices);
+    const surfaceFaces = createSurfaceFaces(pointsToProjectVertices);
 
     loop = new Loop(camera, scene, renderer);
     container.append(renderer.domElement);
@@ -44,7 +43,7 @@ class World {
     scene.add(cube);
     scene.add(points);
     scene.add(...lines);
-    // scene.add(surfaceFaces.frontSurface, surfaceFaces.backSurface);
+    scene.add(surfaceFaces.frontSurface, surfaceFaces.backSurface);
     // scene.add(frontMesh, backMesh);
   }
 
